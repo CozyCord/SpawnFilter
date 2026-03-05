@@ -1,4 +1,4 @@
-package net.cozystudios.safespawn;
+package net.cozystudios.spawnfilter;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.fabricmc.loader.api.FabricLoader;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SafeSpawnConfig {
-	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("safespawn.toml");
+public class SpawnFilterConfig {
+	private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("spawnfilter.toml");
 
 	private static List<String> blockedBlocks = new ArrayList<>();
 	private static List<String> blockedTags = new ArrayList<>();
@@ -26,23 +26,23 @@ public class SafeSpawnConfig {
 				.build();
 		config.load();
 
-		blockedBlocks = config.getOrElse("safespawn.blocked_blocks", new ArrayList<>(Arrays.asList(
+		blockedBlocks = config.getOrElse("spawnfilter.blocked_blocks", new ArrayList<>(Arrays.asList(
 				"minecraft:water", "minecraft:lava", "minecraft:magma_block"
 		)));
-		blockedTags = config.getOrElse("safespawn.blocked_tags", new ArrayList<>(Arrays.asList(
+		blockedTags = config.getOrElse("spawnfilter.blocked_tags", new ArrayList<>(Arrays.asList(
 				"#minecraft:fire", "#minecraft:wool", "#c:fluids", "#minecraft:leaves"
 		)));
 
 		config.close();
 
-		SafeSpawnMod.LOGGER.info("Loaded SafeSpawn config: {} blocked blocks, {} blocked tags",
+		SpawnFilterMod.LOGGER.info("Loaded SpawnFilter config: {} blocked blocks, {} blocked tags",
 				blockedBlocks.size(), blockedTags.size());
 	}
 
 	private static void createDefaultConfig() {
 		try {
 			Files.createDirectories(CONFIG_PATH.getParent());
-			String content = "[safespawn]\n"
+			String content = "[spawnfilter]\n"
 					+ "# Individual blocks the player cannot spawn on\n"
 					+ "blocked_blocks = [\n"
 					+ "    \"minecraft:water\",\n"
@@ -60,7 +60,7 @@ public class SafeSpawnConfig {
 					+ "]\n";
 			Files.writeString(CONFIG_PATH, content);
 		} catch (IOException e) {
-			SafeSpawnMod.LOGGER.error("Failed to create default SafeSpawn config", e);
+			SpawnFilterMod.LOGGER.error("Failed to create default SpawnFilter config", e);
 		}
 	}
 

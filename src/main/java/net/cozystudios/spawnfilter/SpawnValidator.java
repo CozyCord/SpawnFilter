@@ -1,4 +1,4 @@
-package net.cozystudios.safespawn;
+package net.cozystudios.spawnfilter;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ public class SpawnValidator {
 	public static void resolveBlockedBlocks() {
 		Set<Block> resolved = new HashSet<>();
 
-		for (String blockId : SafeSpawnConfig.getBlockedBlocks()) {
+		for (String blockId : SpawnFilterConfig.getBlockedBlocks()) {
 			//? if <1.21 {
 			Identifier id = new Identifier(blockId);
 			//?} else {
@@ -30,7 +30,7 @@ public class SpawnValidator {
 			resolved.add(block);
 		}
 
-		for (String tagStr : SafeSpawnConfig.getBlockedTags()) {
+		for (String tagStr : SpawnFilterConfig.getBlockedTags()) {
 			String tagId = tagStr.startsWith("#") ? tagStr.substring(1) : tagStr;
 			//? if <1.21 {
 			Identifier id = new Identifier(tagId);
@@ -46,7 +46,7 @@ public class SpawnValidator {
 		}
 
 		blockedBlockSet = resolved;
-		SafeSpawnMod.LOGGER.info("Resolved {} blocked blocks (including tag members)", resolved.size());
+		SpawnFilterMod.LOGGER.info("Resolved {} blocked blocks (including tag members)", resolved.size());
 	}
 
 	public static boolean isBlockSafe(ServerWorld world, BlockPos pos) {

@@ -35,4 +35,4 @@ stonecutter {
     create(rootProject)
 }
 
-rootProject.name = "SafeSpawn"
+rootProject.name = "SpawnFilter"

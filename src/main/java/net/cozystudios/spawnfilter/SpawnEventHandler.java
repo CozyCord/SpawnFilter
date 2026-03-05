@@ -1,4 +1,4 @@
-package net.cozystudios.safespawn;
+package net.cozystudios.spawnfilter;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -31,8 +31,8 @@ public class SpawnEventHandler {
 			/*ServerPlayerEntity player = handler.getPlayer();
 			*///?}
 
-			SafeSpawnPlayer spawnData = (SafeSpawnPlayer) player;
-			if (spawnData.safespawn_hasSpawned()) {
+			SpawnFilterPlayer spawnData = (SpawnFilterPlayer) player;
+			if (spawnData.spawnfilter_hasSpawned()) {
 				return;
 			}
 
@@ -53,7 +53,7 @@ public class SpawnEventHandler {
 				BlockPos safePos = SpawnValidator.findSafeSpawn(world, playerPos);
 
 				if (safePos != null) {
-					SafeSpawnMod.LOGGER.info("[SafeSpawn] Relocated player spawn from {} at {},{},{} to {},{},{}",
+					SpawnFilterMod.LOGGER.info("[SpawnFilter] Relocated player spawn from {} at {},{},{} to {},{},{}",
 							blockName,
 							playerPos.getX(), playerPos.getY(), playerPos.getZ(),
 							safePos.getX(), safePos.getY(), safePos.getZ());
@@ -68,11 +68,11 @@ public class SpawnEventHandler {
 							WorldProperties.SpawnPoint.create(world.getRegistryKey(), safePos, 0.0f, 0.0f), true), false);
 					*///?}
 				} else {
-					SafeSpawnMod.LOGGER.warn("[SafeSpawn] Could not find a safe spawn position within search radius. Leaving spawn unchanged.");
+					SpawnFilterMod.LOGGER.warn("[SpawnFilter] Could not find a safe spawn position within search radius. Leaving spawn unchanged.");
 				}
 			}
 
-			spawnData.safespawn_setHasSpawned(true);
+			spawnData.spawnfilter_setHasSpawned(true);
 		});
 	}
 }

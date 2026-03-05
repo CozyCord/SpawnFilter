@@ -10,21 +10,21 @@
 	],
 	"contact": {
       "homepage": "https://discord.gg/cozycord",
-      "sources": "https://github.com/CozyCord/SafeSpawn",
-      "issues": "https://github.com/CozyCord/SafeSpawn/issues",
+      "sources": "https://github.com/CozyCord/SpawnFilter",
+      "issues": "https://github.com/CozyCord/SpawnFilter/issues",
       "tokimi": "https://linktr.ee/iamtokimi",
       "cozystudios": "https://modrinth.com/organization/cozystudios"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/safespawn/icon.png",
+	"icon": "assets/spawnfilter/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "${group}.SafeSpawnMod"
+          "${group}.SpawnFilterMod"
 		]
 	},
 	"mixins": [
-      "safespawn.mixins.json"
+      "spawnfilter.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.18.4",
