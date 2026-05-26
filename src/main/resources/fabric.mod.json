@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}",
+	"version": "${version}",
+	"name": "${name}",
+	"description": "${description}",
+	"authors": [
+		"Tokimi",
+		"CozyStudios"
+	],
+	"contact": {
+		"homepage": "https://discord.gg/cozycord",
+		"sources": "https://github.com/CozyCord/SpawnFilter",
+		"issues": "https://github.com/CozyCord/SpawnFilter/issues",
+		"tokimi": "https://linktr.ee/iamtokimi",
+		"cozystudios": "https://modrinth.com/organization/cozystudios"
+	},
+	"license": "ARR",
+	"icon": "assets/spawnfilter/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"${group}.SpawnFilterMod"
+		]
+	},
+	"mixins": [
+		"spawnfilter.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.6",
+		"minecraft": "~26.1",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
