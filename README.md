@@ -55,11 +55,8 @@ The config gets re-resolved when the server starts and when datapacks reload (`/
 ## Supported versions
 
 - 1.20.1
-- 1.21-1.21.1
-- 1.21.2-1.21.3
-- 1.21.4
-- 1.21.5-1.21.10
-- 1.21.11
+- 1.21.x
+- 26.1.x
 
 Fabric only. Requires Fabric API.
 
