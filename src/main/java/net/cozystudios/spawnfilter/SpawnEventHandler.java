@@ -46,30 +46,50 @@ public class SpawnEventHandler {
 			BlockPos playerPos = player.getBlockPos();
 			BlockPos belowPos = playerPos.down();
 
-			if (!SpawnValidator.isBlockSafe(world, belowPos)) {
+			boolean blockUnsafe = !SpawnValidator.isBlockSafe(world, belowPos);
+			boolean biomeUnsafe = SpawnValidator.isBiomeBlockedAt(world, playerPos);
+
+			if (blockUnsafe || biomeUnsafe) {
 				Block unsafeBlock = world.getBlockState(belowPos).getBlock();
 				String blockName = Registries.BLOCK.getId(unsafeBlock).toString();
+				String reason = blockUnsafe && biomeUnsafe ? "unsafe block + biome"
+						: blockUnsafe ? "unsafe block (" + blockName + ")"
+						: "unsafe biome";
 
 				BlockPos safePos = SpawnValidator.findSafeSpawn(world, playerPos);
+				BlockPos targetPos;
 
 				if (safePos != null) {
-					SpawnFilterMod.LOGGER.info("[SpawnFilter] Relocated player spawn from {} at {},{},{} to {},{},{}",
-							blockName,
+					targetPos = safePos;
+					SpawnFilterMod.LOGGER.info("[SpawnFilter] Relocated player spawn ({}) from {},{},{} to {},{},{}",
+							reason,
 							playerPos.getX(), playerPos.getY(), playerPos.getZ(),
 							safePos.getX(), safePos.getY(), safePos.getZ());
-
-					player.requestTeleport(safePos.getX() + 0.5, safePos.getY(), safePos.getZ() + 0.5);
-					//? if <1.21.5 {
-					player.setSpawnPoint(world.getRegistryKey(), safePos, 0.0f, true, false);
-					//?} else if <1.21.11 {
-					/*player.setSpawnPoint(new ServerPlayerEntity.Respawn(world.getRegistryKey(), safePos, 0.0f, true), false);
-					*///?} else {
-					/*player.setSpawnPoint(new ServerPlayerEntity.Respawn(
-							WorldProperties.SpawnPoint.create(world.getRegistryKey(), safePos, 0.0f, 0.0f), true), false);
-					*///?}
+				} else if (SpawnFilterConfig.getBuildSafetyPlatform()) {
+					targetPos = SpawnValidator.buildSafetyPlatform(world, playerPos);
+					SpawnFilterMod.LOGGER.warn("[SpawnFilter] No safe spawn within {} blocks of {},{},{} ({}) — built a platform at {},{},{}",
+							SpawnFilterConfig.getMaxSearchRadius(),
+							playerPos.getX(), playerPos.getY(), playerPos.getZ(),
+							reason,
+							targetPos.getX(), targetPos.getY(), targetPos.getZ());
 				} else {
-					SpawnFilterMod.LOGGER.warn("[SpawnFilter] Could not find a safe spawn position within search radius. Leaving spawn unchanged.");
+					SpawnFilterMod.LOGGER.warn("[SpawnFilter] No safe spawn found within {} blocks ({}) and safety platform disabled — leaving player at {},{},{}",
+							SpawnFilterConfig.getMaxSearchRadius(),
+							reason,
+							playerPos.getX(), playerPos.getY(), playerPos.getZ());
+					spawnData.spawnfilter_setHasSpawned(true);
+					return;
 				}
+
+				player.requestTeleport(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
+				//? if <1.21.5 {
+				player.setSpawnPoint(world.getRegistryKey(), targetPos, 0.0f, true, false);
+				//?} else if <1.21.11 {
+				/*player.setSpawnPoint(new ServerPlayerEntity.Respawn(world.getRegistryKey(), targetPos, 0.0f, true), false);
+				*///?} else {
+				/*player.setSpawnPoint(new ServerPlayerEntity.Respawn(
+						WorldProperties.SpawnPoint.create(world.getRegistryKey(), targetPos, 0.0f, 0.0f), true), false);
+				*///?}
 			}
 
 			spawnData.spawnfilter_setHasSpawned(true);
